@@ -13,6 +13,9 @@ import ru.yandex.practicum.model.hub.HubEvent;
 import ru.yandex.practicum.model.sensor.SensorEvent;
 import ru.yandex.practicum.serializer.AvroSerializer;
 
+/**
+ * Сервис обработки событий
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j

@@ -16,18 +16,17 @@ import ru.yandex.practicum.model.hub.enums.HubEventType;
 @ToString(callSuper = true)
 public class DeviceAddedEvent extends HubEvent {
 
+    /**
+     * Идентификатор добавленного устройства.
+     */
+    @NotBlank
+    private String id;
 
     /**
      * Тип устройства
      */
     @NotNull
     private DeviceType deviceType;
-
-    /**
-     * Идентификатор добавленного устройства.
-     */
-    @NotBlank
-    private String id;
 
 
     @Override

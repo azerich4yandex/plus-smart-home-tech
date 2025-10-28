@@ -14,7 +14,7 @@ import ru.yandex.practicum.model.sensor.SensorEvent;
 import ru.yandex.practicum.service.CollectorService;
 
 /**
- *
+ * API для передачи событий от датчиков и хабов
  */
 @RestController
 @RequestMapping(path = "/events")

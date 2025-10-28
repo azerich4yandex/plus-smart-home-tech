@@ -3,7 +3,6 @@ package ru.yandex.practicum.mapper;
 import java.util.stream.Collectors;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import ru.yandex.practicum.kafka.telemetry.event.ActionTypeAvro;
 import ru.yandex.practicum.kafka.telemetry.event.ConditionOperationAvro;
 import ru.yandex.practicum.kafka.telemetry.event.ConditionTypeAvro;
@@ -21,11 +20,11 @@ import ru.yandex.practicum.model.hub.HubEvent;
 import ru.yandex.practicum.model.hub.ScenarioAddedEvent;
 import ru.yandex.practicum.model.hub.ScenarioRemovedEvent;
 
-@Component
+@UtilityClass
 @Slf4j
 public class HubEventMapper {
 
-    public static HubEventAvro toAvro(HubEvent event) {
+    public HubEventAvro toAvro(HubEvent event) {
         log.info("Преобразование HubEvent типа {}", event.getType());
 
         HubEventAvro.Builder builder = HubEventAvro.newBuilder()
@@ -41,7 +40,7 @@ public class HubEventMapper {
                 builder.setPayload(
                         DeviceAddedEventAvro.newBuilder()
                                 .setId(added.getId())
-                                .setType(DeviceTypeAvro.valueOf(added.getType().name()))
+                                .setType(DeviceTypeAvro.valueOf(added.getDeviceType().name()))
                                 .build());
             }
 
