@@ -6,10 +6,9 @@ spring:
     bootstrap-servers: localhost:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.ByteArraySerializer
+      value-serializer: ru.yandex.practicum.kafka.serialization.AvroSerializer
     properties:
       acks: all
-      linger.ms: 5
       batch.size: 16384
       buffer.memory: 33554432
 

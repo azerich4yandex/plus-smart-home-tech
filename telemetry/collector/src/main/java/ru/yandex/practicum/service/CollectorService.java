@@ -2,6 +2,7 @@ package ru.yandex.practicum.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.avro.specific.SpecificRecordBase;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,6 @@ import ru.yandex.practicum.mapper.HubEventMapper;
 import ru.yandex.practicum.mapper.SensorEventMapper;
 import ru.yandex.practicum.model.hub.HubEvent;
 import ru.yandex.practicum.model.sensor.SensorEvent;
-import ru.yandex.practicum.serializer.AvroSerializer;
 
 /**
  * Сервис обработки событий
@@ -21,7 +21,7 @@ import ru.yandex.practicum.serializer.AvroSerializer;
 @Slf4j
 public class CollectorService {
 
-    private final KafkaTemplate<String, byte[]> kafkaTemplate;
+    private final KafkaTemplate<String, SpecificRecordBase> kafkaTemplate;
 
     @Value("${collector.topics.sensors}")
     private String sensorsTopic;
@@ -34,10 +34,8 @@ public class CollectorService {
 
         SensorEventAvro eventAvro = SensorEventMapper.toAvro(event);
 
-        byte[] payload = AvroSerializer.serialize(eventAvro);
-
         log.info("Передача результатов обработки в SensorEvent-топик {}", sensorsTopic);
-        kafkaTemplate.send(sensorsTopic, event.getHubId(), payload);
+        kafkaTemplate.send(sensorsTopic, null, event.getTimestamp().toEpochMilli(), event.getHubId(), eventAvro);
 
         log.info("Возврат результатов создания события SensorEvent на уровень контроллера");
     }
@@ -47,10 +45,8 @@ public class CollectorService {
 
         HubEventAvro eventAvro = HubEventMapper.toAvro(event);
 
-        byte[] payload = AvroSerializer.serialize(eventAvro);
-
         log.info("Передача результатов обработки в HubEvent-топик {}", hubsTopic);
-        kafkaTemplate.send(hubsTopic, event.getHubId(), payload);
+        kafkaTemplate.send(sensorsTopic, null, event.getTimestamp().toEpochMilli(), event.getHubId(), eventAvro);
 
         log.info("Возврат результатов создания события HubEvent на уровень контроллера");
     }
