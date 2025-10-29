@@ -3,8 +3,9 @@ package ru.yandex.practicum.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.avro.specific.SpecificRecordBase;
+import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
@@ -21,7 +22,7 @@ import ru.yandex.practicum.model.sensor.SensorEvent;
 @Slf4j
 public class CollectorService {
 
-    private final KafkaTemplate<String, SpecificRecordBase> kafkaTemplate;
+    private final Producer<String, SpecificRecordBase> producer;
 
     @Value("${collector.topics.sensors}")
     private String sensorsTopic;
@@ -35,7 +36,25 @@ public class CollectorService {
         SensorEventAvro eventAvro = SensorEventMapper.toAvro(event);
 
         log.info("Передача результатов обработки в SensorEvent-топик {}", sensorsTopic);
-        kafkaTemplate.send(sensorsTopic, null, event.getTimestamp().toEpochMilli(), event.getHubId(), eventAvro);
+        try {
+            ProducerRecord<String, SpecificRecordBase> record = new ProducerRecord<>(
+                    sensorsTopic,
+                    null,
+                    event.getTimestamp().toEpochMilli(),
+                    event.getHubId(),
+                    eventAvro);
+            producer.send(record, (metadata, exception) -> {
+                if (exception != null) {
+                    throw new RuntimeException("Ошибка при отправке данных в топик [" + sensorsTopic + "]", exception);
+                } else {
+                    log.info(
+                            "Запись о событии SensorEvent успешно отправлена в топик [{}], partition = {}, offset = {}",
+                            sensorsTopic, metadata.partition(), metadata.offset());
+                }
+            });
+        } catch (Exception e) {
+            throw new RuntimeException("Ошибка при отправке результатов в Kafka", e);
+        }
 
         log.info("Возврат результатов создания события SensorEvent на уровень контроллера");
     }
@@ -46,7 +65,24 @@ public class CollectorService {
         HubEventAvro eventAvro = HubEventMapper.toAvro(event);
 
         log.info("Передача результатов обработки в HubEvent-топик {}", hubsTopic);
-        kafkaTemplate.send(sensorsTopic, null, event.getTimestamp().toEpochMilli(), event.getHubId(), eventAvro);
+        try {
+            ProducerRecord<String, SpecificRecordBase> record = new ProducerRecord<>(
+                    sensorsTopic,
+                    null,
+                    event.getTimestamp().toEpochMilli(),
+                    event.getHubId(),
+                    eventAvro);
+            producer.send(record, (metadata, exception) -> {
+                if (exception != null) {
+                    throw new RuntimeException("Ошибка при отправке данных в топик [" + sensorsTopic + "]", exception);
+                } else {
+                    log.info("Запись о событии HubEvent успешно отправлена в топик [{}], partition = {}, offset = {}",
+                            sensorsTopic, metadata.partition(), metadata.offset());
+                }
+            });
+        } catch (Exception e) {
+            throw new RuntimeException("Ошибка при отправке результатов в Kafka", e);
+        }
 
         log.info("Возврат результатов создания события HubEvent на уровень контроллера");
     }
