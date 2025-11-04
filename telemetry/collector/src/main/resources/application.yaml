@@ -7,6 +7,10 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: ru.yandex.practicum.kafka.serialization.AvroSerializer
 
+grpc:
+  server:
+    port: 9090
+
 collector:
   topics:
     sensors: telemetry.sensors.v1
