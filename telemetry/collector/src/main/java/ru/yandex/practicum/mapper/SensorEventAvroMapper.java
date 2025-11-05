@@ -17,7 +17,7 @@ import ru.yandex.practicum.model.sensor.TemperatureSensorEvent;
 
 @UtilityClass
 @Slf4j
-public class SensorEventMapper {
+public class SensorEventAvroMapper {
 
     public SensorEventAvro toAvro(SensorEvent event) {
         log.info("Преобразование SensorEvent типа {}", event.getType());

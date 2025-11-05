@@ -7,6 +7,10 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: ru.yandex.practicum.kafka.serialization.AvroSerializer
 
+grpc:
+  server:
+    port: 59091
+
 collector:
   topics:
     sensors: telemetry.sensors.v1
@@ -14,7 +18,7 @@ collector:
 
 logging:
   level:
-    root: INFO
-    org.springframework.kafka: INFO
-    org.springframework.web: DEBUG
-    org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping: DEBUG
+    root: TRACE
+    org.springframework.kafka: TRACE
+    org.springframework.web: TRACE
+    org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping: TRACE
