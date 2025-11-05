@@ -1,37 +1,33 @@
 package ru.yandex.practicum.service.handler.hub;
 
-import org.apache.avro.specific.SpecificRecordBase;
-import org.springframework.kafka.core.KafkaTemplate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
-import ru.yandex.practicum.grpc.telemetry.event.HubEventProto.PayloadCase;
-import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
-import ru.yandex.practicum.mapper.HubEventAvroMapper;
-import ru.yandex.practicum.mapper.HubEventProtoMapper;
-import ru.yandex.practicum.model.hub.HubEvent;
+import ru.yandex.practicum.kafka.telemetry.event.ScenarioRemovedEventAvro;
+import ru.yandex.practicum.service.producer.CollectorKafkaProducer;
 
+@Slf4j
 @Component
-public class ScenarioRemovedEventHandler extends BaseHubEventHandler {
+public class ScenarioRemovedEventHandler extends BaseHubEventHandler<ScenarioRemovedEventAvro> {
 
-    public ScenarioRemovedEventHandler(
-            KafkaTemplate<String, SpecificRecordBase> kafkaTemplate) {
-        super(kafkaTemplate);
+    public ScenarioRemovedEventHandler(CollectorKafkaProducer producer) {
+        super(producer);
     }
 
     @Override
-    protected HubEvent mapHubEventProtoToModel(HubEventProto eventProto) {
-        HubEvent event = HubEventProtoMapper.toScenarioRemovedEvent(eventProto);
-        return mapBaseProtoFieldsToModel(event, eventProto);
+    protected ScenarioRemovedEventAvro protoToAvro(HubEventProto eventProto) {
+        log.info("Преобразование HubEventProto в ScenarioRemovedEventAvro");
+
+        ScenarioRemovedEventAvro avro = ScenarioRemovedEventAvro.newBuilder()
+                .setName(eventProto.getScenarioRemoved().getName())
+                .build();
+
+        log.info("Преобразование HubEventProto в ScenarioRemovedEventAvro завершено");
+        return avro;
     }
 
     @Override
-    protected HubEventAvro mapModelToHubEventAvro(HubEvent event) {
-        HubEventAvro eventAvro = HubEventAvroMapper.toAvro(event);
-        return mapBaseModelFieldsToAvro(event, eventAvro);
-    }
-
-    @Override
-    public PayloadCase getMessageHubType() {
-        return PayloadCase.SCENARIO_REMOVED;
+    public HubEventProto.PayloadCase getMessageHubType() {
+        return HubEventProto.PayloadCase.SCENARIO_REMOVED;
     }
 }

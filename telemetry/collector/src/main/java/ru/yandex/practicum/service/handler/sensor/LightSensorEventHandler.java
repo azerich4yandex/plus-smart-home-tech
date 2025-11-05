@@ -1,37 +1,36 @@
 package ru.yandex.practicum.service.handler.sensor;
 
-import org.apache.avro.specific.SpecificRecordBase;
-import org.springframework.kafka.core.KafkaTemplate;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.grpc.telemetry.event.LightSensorProto;
 import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
-import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto.PayloadCase;
-import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
-import ru.yandex.practicum.mapper.SensorEventAvroMapper;
-import ru.yandex.practicum.mapper.SensorEventProtoMapper;
-import ru.yandex.practicum.model.sensor.SensorEvent;
+import ru.yandex.practicum.kafka.telemetry.event.LightSensorAvro;
+import ru.yandex.practicum.service.producer.CollectorKafkaProducer;
 
+@Slf4j
 @Component
-public class LightSensorEventHandler extends BaseSensorEventHandler {
+public class LightSensorEventHandler extends BaseSensorEventHandler<LightSensorAvro> {
 
-    public LightSensorEventHandler(
-            KafkaTemplate<String, SpecificRecordBase> kafkaTemplate) {
-        super(kafkaTemplate);
+    public LightSensorEventHandler(CollectorKafkaProducer producer) {
+        super(producer);
     }
 
     @Override
-    protected SensorEvent mapSensorEventProtoToModel(SensorEventProto eventProto) {
-        SensorEvent event = SensorEventProtoMapper.toLightSensorEvent(eventProto);
-        return mapBaseProtoFieldsToModel(event, eventProto);
+    protected LightSensorAvro protoToAvro(SensorEventProto eventProto) {
+        log.info("Преобразование SensorEventProto в LightSensorAvro");
+
+        LightSensorProto proto = eventProto.getLightSensorEvent();
+        LightSensorAvro avro = LightSensorAvro.newBuilder()
+                .setLinkQuality(proto.getLinkQuality())
+                .setLuminosity(proto.getLuminosity())
+                .build();
+
+        log.info("Преобразование SensorEventProto в LightSensorAvro завершено");
+        return avro;
     }
 
     @Override
-    protected SensorEventAvro mapModelToSensorEventAvro(SensorEvent event) {
-        SensorEventAvro avro = SensorEventAvroMapper.toAvro(event);
-        return mapBaseModelFieldsToAvro(event, avro);
-    }
-
-    @Override
-    public PayloadCase getMessageSensorType() {
-        return PayloadCase.LIGHT_SENSOR_EVENT;
+    public SensorEventProto.PayloadCase getMessageSensorType() {
+        return SensorEventProto.PayloadCase.LIGHT_SENSOR_EVENT;
     }
 }

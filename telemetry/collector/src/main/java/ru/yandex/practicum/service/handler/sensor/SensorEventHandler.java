@@ -4,7 +4,7 @@ import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
 
 public interface SensorEventHandler {
 
-    void handle(SensorEventProto eventProto);
+    void handleEvent(SensorEventProto eventProto);
 
     SensorEventProto.PayloadCase getMessageSensorType();
 }

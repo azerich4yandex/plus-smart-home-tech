@@ -39,17 +39,17 @@ public class CollectorController extends CollectorControllerImplBase {
      * Обработчик событий датчиков
      */
     @Override
-    public void collectSensorEvent(SensorEventProto event, StreamObserver<Empty> responseObserver) {
+    public void collectSensorEvent(SensorEventProto request, StreamObserver<Empty> responseObserver) {
         log.info("Создание события SensorEvent на уровне контроллера");
 
         try {
-            log.info("Получен SensorEventProto: {}", event.getPayloadCase());
+            log.info("Получен SensorEventProto: {}", request.getPayloadCase());
 
-            if (sensorHandlers.containsKey(event.getPayloadCase())) {
-                sensorHandlers.get(event.getPayloadCase()).handle(event);
+            if (sensorHandlers.containsKey(request.getPayloadCase())) {
+                sensorHandlers.get(request.getPayloadCase()).handleEvent(request);
             } else {
                 throw new IllegalArgumentException(
-                        "Обработчик для SensorEventProto " + event.getPayloadCase() + " не найден.");
+                        "Обработчик для SensorEventProto " + request.getPayloadCase() + " не найден.");
             }
             log.info("На уровне контроллера получена информация об успешном создании события SensorEventProto");
 
@@ -68,17 +68,17 @@ public class CollectorController extends CollectorControllerImplBase {
      * Обработчик событий хабов
      */
     @Override
-    public void collectHubEvent(HubEventProto event, StreamObserver<Empty> responseObserver) {
+    public void collectHubEvent(HubEventProto request, StreamObserver<Empty> responseObserver) {
         log.info("Создание события HubEvent на уровне контроллера");
-        log.info("Получен HubEvent: {}", event);
+        log.info("Получен HubEvent: {}", request);
 
         try {
-            log.info("Получен HubEventProto: {}", event.getPayloadCase());
+            log.info("Получен HubEventProto: {}", request.getPayloadCase());
 
-            if (hubHandlers.containsKey(event.getPayloadCase())) {
-                hubHandlers.get(event.getPayloadCase()).handle(event);
+            if (hubHandlers.containsKey(request.getPayloadCase())) {
+                hubHandlers.get(request.getPayloadCase()).handleEvent(request);
             } else {
-                throw new IllegalArgumentException("Обработчик для HubEventProto " + event.getPayloadCase() + " не найден");
+                throw new IllegalArgumentException("Обработчик для HubEventProto " + request.getPayloadCase() + " не найден");
             }
             log.info("На уровне контроллера получена информация об успешном создании события HubEventProto");
 
