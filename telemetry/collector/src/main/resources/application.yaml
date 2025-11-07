@@ -18,7 +18,7 @@ collector:
 
 logging:
   level:
-    root: TRACE
-    org.springframework.kafka: TRACE
-    org.springframework.web: TRACE
-    org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping: TRACE
+    root: INFO
+    org.springframework.kafka: INFO
+    org.springframework.web: INFO
+    org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping: INFO
