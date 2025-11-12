@@ -1,4 +1,4 @@
-package ru.yandex.practicum.service;
+package ru.yandex.practicum.config;
 
 import java.util.Properties;
 import org.apache.kafka.clients.consumer.KafkaConsumer;

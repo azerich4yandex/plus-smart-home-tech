@@ -6,9 +6,9 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
 @SpringBootApplication
 @ConfigurationPropertiesScan
-public class CollectorApplication {
+public class Collector {
 
     public static void main(String[] args) {
-        SpringApplication.run(CollectorApplication.class, args);
+        SpringApplication.run(Collector.class, args);
     }
 }

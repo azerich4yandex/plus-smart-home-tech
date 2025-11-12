@@ -122,24 +122,24 @@ public class CollectorService {
                 eventProto.getTimestamp().getNanos());
 
         switch (eventProto.getPayloadCase()) {
-            case DEVICE_ADDED -> {
+            case DEVICE_ADDED_EVENT -> {
                 DeviceAddedEvent e = new DeviceAddedEvent();
 
-                e.setId(eventProto.getDeviceAdded().getId());
-                e.setDeviceType(DeviceType.valueOf(eventProto.getDeviceAdded().getType().name()));
+                e.setId(eventProto.getDeviceAddedEvent().getId());
+                e.setDeviceType(DeviceType.valueOf(eventProto.getDeviceAddedEvent().getType().name()));
                 event = e;
             }
-            case DEVICE_REMOVED -> {
+            case DEVICE_REMOVED_EVENT -> {
                 DeviceRemovedEvent e = new DeviceRemovedEvent();
 
-                e.setId(eventProto.getDeviceRemoved().getId());
+                e.setId(eventProto.getDeviceRemovedEvent().getId());
                 event = e;
             }
-            case SCENARIO_ADDED -> {
+            case SCENARIO_ADDED_EVENT -> {
                 ScenarioAddedEvent e = new ScenarioAddedEvent();
 
-                e.setName(eventProto.getScenarioAdded().getName());
-                List<ScenarioCondition> conditions = eventProto.getScenarioAdded().getConditionList().stream()
+                e.setName(eventProto.getScenarioAddedEvent().getName());
+                List<ScenarioCondition> conditions = eventProto.getScenarioAddedEvent().getConditionList().stream()
                         .map(conditionProto -> {
                             ScenarioCondition condition = new ScenarioCondition();
 
@@ -162,7 +162,7 @@ public class CollectorService {
                         .toList();
                 e.setConditions(conditions);
 
-                List<DeviceAction> actions = eventProto.getScenarioAdded().getActionList().stream()
+                List<DeviceAction> actions = eventProto.getScenarioAddedEvent().getActionList().stream()
                         .map(actionProto -> {
                             DeviceAction action = new DeviceAction();
 
@@ -175,10 +175,10 @@ public class CollectorService {
                 e.setActions(actions);
                 event = e;
             }
-            case SCENARIO_REMOVED -> {
+            case SCENARIO_REMOVED_EVENT -> {
                 ScenarioRemovedEvent e = new ScenarioRemovedEvent();
 
-                e.setName(eventProto.getScenarioRemoved().getName());
+                e.setName(eventProto.getScenarioRemovedEvent().getName());
                 event = e;
             }
             default -> {

@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.grpc.telemetry.event.DeviceActionProto;
 import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
+import ru.yandex.practicum.grpc.telemetry.event.HubEventProto.PayloadCase;
 import ru.yandex.practicum.grpc.telemetry.event.ScenarioAddedEventProto;
 import ru.yandex.practicum.grpc.telemetry.event.ScenarioConditionProto;
 import ru.yandex.practicum.kafka.telemetry.event.ActionTypeAvro;
@@ -26,7 +27,7 @@ public class ScenarioAddedEventHandler extends BaseHubEventHandler<ScenarioAdded
     protected ScenarioAddedEventAvro protoToAvro(HubEventProto eventProto) {
         log.info("Преобразование HubEventProto в ScenarioAddedEventAvro");
 
-        ScenarioAddedEventProto proto = eventProto.getScenarioAdded();
+        ScenarioAddedEventProto proto = eventProto.getScenarioAddedEvent();
         ScenarioAddedEventAvro avro = ScenarioAddedEventAvro.newBuilder()
                 .setName(proto.getName())
                 .setActions(proto.getActionList().stream()
@@ -43,7 +44,7 @@ public class ScenarioAddedEventHandler extends BaseHubEventHandler<ScenarioAdded
 
     @Override
     public HubEventProto.PayloadCase getMessageHubType() {
-        return HubEventProto.PayloadCase.SCENARIO_ADDED;
+        return PayloadCase.SCENARIO_ADDED_EVENT;
     }
 
     private DeviceActionAvro toDeviceActionAvro(DeviceActionProto deviceAction) {
