@@ -24,8 +24,8 @@ public class HubEventProtoMapper {
         log.info("Преобразование HubEventProto в DeviceAddedEvent");
 
         DeviceAddedEvent event = new DeviceAddedEvent();
-        event.setId(eventProto.getDeviceAdded().getId());
-        event.setDeviceType(DeviceType.valueOf(eventProto.getDeviceAdded().getType().name()));
+        event.setId(eventProto.getDeviceAddedEvent().getId());
+        event.setDeviceType(DeviceType.valueOf(eventProto.getDeviceAddedEvent().getType().name()));
 
         log.info("Преобразование HubEventProto в DeviceAddedEvent завершено");
         return event;
@@ -35,7 +35,7 @@ public class HubEventProtoMapper {
         log.info("Преобразование HubEventProto в DeviceRemovedEvent");
 
         DeviceRemovedEvent event = new DeviceRemovedEvent();
-        event.setId(eventProto.getDeviceRemoved().getId());
+        event.setId(eventProto.getDeviceRemovedEvent().getId());
 
         log.info("Преобразование HubEventProto в DeviceRemovedEvent завершено");
         return event;
@@ -45,9 +45,9 @@ public class HubEventProtoMapper {
         log.info("Преобразование HubEventProto в ScenarioAddedEvent");
 
         ScenarioAddedEvent event = new ScenarioAddedEvent();
-        event.setName(eventProto.getScenarioAdded().getName());
+        event.setName(eventProto.getScenarioAddedEvent().getName());
 
-        List<ScenarioCondition> conditions = eventProto.getScenarioAdded().getConditionList().stream()
+        List<ScenarioCondition> conditions = eventProto.getScenarioAddedEvent().getConditionList().stream()
                 .map(conditionProto -> {
                     ScenarioCondition condition = new ScenarioCondition();
 
@@ -70,7 +70,7 @@ public class HubEventProtoMapper {
                 .toList();
         event.setConditions(conditions);
 
-        List<DeviceAction> actions = eventProto.getScenarioAdded().getActionList().stream()
+        List<DeviceAction> actions = eventProto.getScenarioAddedEvent().getActionList().stream()
                 .map(actionProto -> {
                     DeviceAction action = new DeviceAction();
 
@@ -90,7 +90,7 @@ public class HubEventProtoMapper {
         log.info("Преобразование HubEventProto в ScenarioRemovedEvent");
 
         ScenarioRemovedEvent event = new ScenarioRemovedEvent();
-        event.setName(eventProto.getScenarioRemoved().getName());
+        event.setName(eventProto.getScenarioRemovedEvent().getName());
 
         log.info("Преобразование HubEventProto в ScenarioRemovedEvent завершено");
         return event;

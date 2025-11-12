@@ -15,10 +15,3 @@ collector:
   topics:
     sensors: telemetry.sensors.v1
     hubs: telemetry.hubs.v1
-
-logging:
-  level:
-    root: INFO
-    org.springframework.kafka: INFO
-    org.springframework.web: INFO
-    org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping: INFO

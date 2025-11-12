@@ -9,7 +9,7 @@ import ru.yandex.practicum.kafka.telemetry.event.SensorStateAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
 
 @Component
-public class SnapshotProcessor {
+public class SnapshotHandler {
 
     private final Map<String, SensorsSnapshotAvro> snapshotAvroMap = new HashMap<>();
 
