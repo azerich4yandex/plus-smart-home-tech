@@ -19,7 +19,6 @@ import lombok.experimental.FieldDefaults;
 @Table(name = "sensors")
 @Getter
 @Setter
-@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

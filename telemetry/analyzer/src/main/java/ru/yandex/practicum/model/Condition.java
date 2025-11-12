@@ -31,7 +31,6 @@ import ru.yandex.practicum.kafka.telemetry.event.ConditionTypeAvro;
 @SecondaryTable(name = "scenario_conditions", pkJoinColumns = @PrimaryKeyJoinColumn(name = "condition_id"))
 @Getter
 @Setter
-@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

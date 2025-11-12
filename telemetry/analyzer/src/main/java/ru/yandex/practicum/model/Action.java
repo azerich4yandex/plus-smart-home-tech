@@ -30,7 +30,6 @@ import ru.yandex.practicum.kafka.telemetry.event.ActionTypeAvro;
 @SecondaryTable(name = "scenario_actions", pkJoinColumns = @PrimaryKeyJoinColumn(name = "action_id"))
 @Getter
 @Setter
-@ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
