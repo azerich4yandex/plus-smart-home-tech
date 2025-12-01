@@ -16,17 +16,19 @@ spring:
     url: "jdbc:postgresql://localhost:5432/smarthome"
     username: "caramba"
     password: "yohoho"
-kafka:
-  bootstrap-servers: "localhost:9092"
-  group-id:
-    snapshot: "analyzer.snapshots"
-    hub: "analyzer.hubs"
+  kafka:
+    bootstrap-servers: "localhost:9092"
+    consumer:
+      group-id:
+        snapshot: "analyzer.snapshots"
+        hub: "analyzer.hubs"
+      enable-auto-commit: false
+
+analyzer:
   topics:
     snapshot: "telemetry.snapshots.v1"
     hub: "telemetry.hubs.v1"
-  consumer:
-    enable-auto-commit: false
-    attempt-timeout: 1000
+
 grpc:
   client:
     hub-router:
