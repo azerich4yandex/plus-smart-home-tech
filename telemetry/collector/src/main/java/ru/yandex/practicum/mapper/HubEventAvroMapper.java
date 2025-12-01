@@ -22,7 +22,7 @@ import ru.yandex.practicum.model.hub.ScenarioRemovedEvent;
 
 @UtilityClass
 @Slf4j
-public class HubEventMapper {
+public class HubEventAvroMapper {
 
     public HubEventAvro toAvro(HubEvent event) {
         log.info("Преобразование HubEvent типа {}", event.getType());
