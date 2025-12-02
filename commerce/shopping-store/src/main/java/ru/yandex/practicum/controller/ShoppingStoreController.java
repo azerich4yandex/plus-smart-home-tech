@@ -1,15 +1,11 @@
 package ru.yandex.practicum.controller;
 
 import jakarta.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,26 +32,8 @@ public class ShoppingStoreController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Page<ProductDto> getShoppingStoreProducts(@RequestParam String category,
-                                                     @RequestParam(defaultValue = "0") int page,
-                                                     @RequestParam(defaultValue = "1") int size,
-                                                     @RequestParam(defaultValue = "") List<String> sort) {
+                                                     Pageable pageable) {
         log.info("Get products by category: {}", category);
-
-        List<Sort.Order> orders = new ArrayList<>();
-        if (sort != null) {
-            for (String item : sort) {
-                String[] parts = item.split(",");
-                String property = parts[0];
-                Sort.Direction direction = parts.length > 1
-                        ? Sort.Direction.fromString(parts[1])
-                        : Sort.Direction.ASC;
-                orders.add(new Sort.Order(direction, property));
-            }
-        }
-
-        Pageable pageable = orders.isEmpty()
-                ? PageRequest.of(page, size)
-                : PageRequest.of(page, size, Sort.by(orders));
 
         return shoppingStoreService.getProducts(ProductCategory.valueOf(category), pageable);
     }
