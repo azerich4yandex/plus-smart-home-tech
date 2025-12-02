@@ -16,7 +16,6 @@ services:
       KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka:29093'
       KAFKA_LISTENERS: 'PLAINTEXT://kafka:29092,CONTROLLER://kafka:29093,PLAINTEXT_HOST://0.0.0.0:9092'
       CLUSTER_ID: 'K0EA9p0yEe6MkAAAAkKsEg'
-
   kafka-init-topics:
     image: confluentinc/confluent-local:7.4.3
     container_name: kafka-init-topics
@@ -34,12 +33,28 @@ services:
                              --bootstrap-server kafka:29092'"
     init: true
 
-  db:
+  telemetry-db:
+    image: postgres:16.1
+    container_name: telemetry-db
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_DB=telemetry
+      - POSTGRES_USER=caramba
+      - POSTGRES_PASSWORD=yohoho
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10
+
+  commerce-db:
+    container_name: commerce-db
     image: postgres:16.1
     ports:
-      - "5432:5432"
+      - "5434:5432"
     environment:
-      - POSTGRES_DB=smarthome
+      - POSTGRES_DB=commerce
       - POSTGRES_USER=caramba
       - POSTGRES_PASSWORD=yohoho
     healthcheck:
