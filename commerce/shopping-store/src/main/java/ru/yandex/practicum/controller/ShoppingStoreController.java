@@ -1,6 +1,7 @@
 package ru.yandex.practicum.controller;
 
 import jakarta.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -38,11 +39,24 @@ public class ShoppingStoreController {
                                                      @RequestParam(defaultValue = "0") int page,
                                                      @RequestParam(defaultValue = "1") int size,
                                                      @RequestParam(defaultValue = "") List<String> sort) {
-        List<Sort.Order> orderList = sort.stream()
-                .map(s -> new Sort.Order(Sort.Direction.ASC, s))
-                .toList();
-        Pageable pageable = PageRequest.of(page, size, Sort.by(orderList));
         log.info("Get products by category: {}", category);
+
+        List<Sort.Order> orders = new ArrayList<>();
+        if (sort != null) {
+            for (String item : sort) {
+                String[] parts = item.split(",");
+                String property = parts[0];
+                Sort.Direction direction = parts.length > 1
+                        ? Sort.Direction.fromString(parts[1])
+                        : Sort.Direction.ASC;
+                orders.add(new Sort.Order(direction, property));
+            }
+        }
+
+        Pageable pageable = orders.isEmpty()
+                ? PageRequest.of(page, size)
+                : PageRequest.of(page, size, Sort.by(orders));
+
         return shoppingStoreService.getProducts(ProductCategory.valueOf(category), pageable);
     }
 
@@ -50,6 +64,7 @@ public class ShoppingStoreController {
     @ResponseStatus(HttpStatus.OK)
     public ProductDto createProduct(@RequestBody @Valid ProductDto productDto) {
         log.info("Create product: {}", productDto);
+
         return shoppingStoreService.createProduct(productDto);
     }
 
@@ -57,6 +72,7 @@ public class ShoppingStoreController {
     @ResponseStatus(HttpStatus.OK)
     public ProductDto updateProduct(@RequestBody @Valid ProductDto productDto) {
         log.info("Update product: {}", productDto);
+
         return shoppingStoreService.updateProduct(productDto);
     }
 
@@ -64,6 +80,7 @@ public class ShoppingStoreController {
     @ResponseStatus(HttpStatus.OK)
     public Boolean deleteProduct(@RequestBody UUID id) {
         log.info("Remove product from store: {}", id);
+
         return shoppingStoreService.deleteProduct(id);
     }
 
@@ -71,6 +88,7 @@ public class ShoppingStoreController {
     @ResponseStatus(HttpStatus.OK)
     public Boolean updateQuantityState(@RequestParam UUID productId, @RequestParam QuantityState quantityState) {
         log.info("Update product {} quantity: {}", productId, quantityState);
+
         return shoppingStoreService.updateQuantityState(productId, quantityState);
     }
 
@@ -78,6 +96,7 @@ public class ShoppingStoreController {
     @ResponseStatus(HttpStatus.OK)
     public ProductDto getProductById(@PathVariable UUID productId) {
         log.info("Get product by id: {}", productId);
+
         return shoppingStoreService.getProductById(productId);
     }
 }
