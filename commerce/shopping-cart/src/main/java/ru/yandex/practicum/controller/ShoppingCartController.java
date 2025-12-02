@@ -35,7 +35,7 @@ public class ShoppingCartController {
     }
 
     @PutMapping
-    @ResponseStatus(HttpStatus.OK) //так в спецификации указано
+    @ResponseStatus(HttpStatus.OK)
     public ShoppingCartDto addProductToShoppingCart(@RequestParam(name = "username") String userName,
                                                     @RequestBody Map<UUID, Long> products) {
         log.info("Adding products {} to shopping cart for user {}", products, userName);
@@ -43,7 +43,7 @@ public class ShoppingCartController {
     }
 
     @DeleteMapping
-    @ResponseStatus(HttpStatus.OK) //так в спецификации указано
+    @ResponseStatus(HttpStatus.OK)
     public void deactivateShoppingCart(@RequestParam(name = "username") String userName) {
         log.info("Deactivating shopping cart for user {}", userName);
         shoppingCartService.deactivateShoppingCart(userName);
