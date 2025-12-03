@@ -13,6 +13,6 @@ spring:
       mode: always
   datasource:
     driver-class-name: "org.postgresql.Driver"
-    url: "jdbc:postgresql://localhost:5434/commerce"
+    url: "jdbc:postgresql://localhost:5435/shopping_store"
     username: "caramba"
     password: "yohoho"

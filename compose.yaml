@@ -48,13 +48,43 @@ services:
       interval: 5s
       retries: 10
 
-  commerce-db:
-    container_name: commerce-db
+  shopping-cart-db:
+    container_name: shopping-cart-db
     image: postgres:16.1
     ports:
       - "5434:5432"
     environment:
-      - POSTGRES_DB=commerce
+      - POSTGRES_DB=shopping_cart
+      - POSTGRES_USER=caramba
+      - POSTGRES_PASSWORD=yohoho
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10
+
+  shopping-store-db:
+    container_name: shopping-store-db
+    image: postgres:16.1
+    ports:
+      - "5435:5432"
+    environment:
+      - POSTGRES_DB=shopping_store
+      - POSTGRES_USER=caramba
+      - POSTGRES_PASSWORD=yohoho
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10
+
+  warehouse-db:
+    container_name: warehouse-db
+    image: postgres:16.1
+    ports:
+      - "5436:5432"
+    environment:
+      - POSTGRES_DB=warehouse
       - POSTGRES_USER=caramba
       - POSTGRES_PASSWORD=yohoho
     healthcheck:
