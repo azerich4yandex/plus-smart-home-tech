@@ -84,7 +84,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     private ShoppingCart checkAndGetShoppingCart(String userName) {
         checkUser(userName);
         return shoppingCartRepository
-                .findShoppingCartByUserName(userName)
+                .findShoppingCartByUserNameAndIsActive(userName, true)
                 .orElseThrow(() -> new NotFoundShoppingCartException("Shopping cart for user %s not found"
                         .formatted(userName)));
     }
