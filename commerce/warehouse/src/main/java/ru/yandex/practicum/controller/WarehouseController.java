@@ -1,6 +1,8 @@
 package ru.yandex.practicum.controller;
 
 import jakarta.validation.Valid;
+import java.util.Map;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,8 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.dto.shoppingcart.ShoppingCartDto;
 import ru.yandex.practicum.dto.warehouse.AddProductToWarehouseRequest;
 import ru.yandex.practicum.dto.warehouse.AddressDto;
+import ru.yandex.practicum.dto.warehouse.AssemblyProductsForOrderRequest;
 import ru.yandex.practicum.dto.warehouse.BookedProductsDto;
 import ru.yandex.practicum.dto.warehouse.NewProductInWarehouseRequest;
+import ru.yandex.practicum.dto.warehouse.ShippedToDeliveryRequest;
 import ru.yandex.practicum.service.WarehouseService;
 
 @Slf4j
@@ -52,5 +56,26 @@ public class WarehouseController {
     public AddressDto getWarehouseAddress() {
         log.info("getting warehouse address");
         return warehouseService.getWarehouseAddress();
+    }
+
+    @PostMapping("/return")
+    @ResponseStatus(HttpStatus.OK)
+    public void acceptReturn(@RequestBody Map<UUID, Long> products) {
+        log.info("accepting return {}", products);
+        warehouseService.acceptReturn(products);
+    }
+
+    @PostMapping("/shipped")
+    @ResponseStatus(HttpStatus.OK)
+    public void shippedToDelivery(@RequestBody @Valid ShippedToDeliveryRequest request) {
+        log.info("shipped to delivery {}", request);
+        warehouseService.shippedToDelivery(request);
+    }
+
+    @PostMapping("/assembly")
+    @ResponseStatus(HttpStatus.OK)
+    public BookedProductsDto assemblyProductsForOrder(@RequestBody @Valid AssemblyProductsForOrderRequest request) {
+        log.info("assembly products for order {}", request);
+        return warehouseService.assemblyProductsForOrder(request);
     }
 }
