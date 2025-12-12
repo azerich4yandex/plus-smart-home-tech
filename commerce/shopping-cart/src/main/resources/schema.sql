@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS shopping_carts (
 );
 
 CREATE TABLE IF NOT EXISTS shopping_cart_products (
-    product_id UUID PRIMARY KEY,
+    product_id UUID NOT NULL,
     shopping_cart_id UUID REFERENCES shopping_carts(id),
-    quantity BIGINT NOT NULL
+    quantity BIGINT NOT NULL,
+    PRIMARY KEY (product_id, shopping_cart_id)
 );

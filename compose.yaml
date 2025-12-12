@@ -92,3 +92,48 @@ services:
       timeout: 5s
       interval: 5s
       retries: 10
+
+  delivery-db:
+    container_name: delivery-db
+    image: postgres:16.1
+    ports:
+      - "5437:5432"
+    environment:
+      - POSTGRES_DB=delivery
+      - POSTGRES_USER=caramba
+      - POSTGRES_PASSWORD=yohoho
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10
+
+  order-db:
+    container_name: order-db
+    image: postgres:16.1
+    ports:
+      - "5438:5432"
+    environment:
+      - POSTGRES_DB=order
+      - POSTGRES_USER=caramba
+      - POSTGRES_PASSWORD=yohoho
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10
+
+  payment-db:
+    container_name: payment-db
+    image: postgres:16.1
+    ports:
+      - "5439:5432"
+    environment:
+      - POSTGRES_DB=payment
+      - POSTGRES_USER=caramba
+      - POSTGRES_PASSWORD=yohoho
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10

@@ -1,5 +1,8 @@
 package ru.yandex.practicum.controller;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -26,14 +29,14 @@ public class ShoppingCartController implements ShoppingCartOperations {
 
     @Override
     @ResponseStatus(HttpStatus.OK)
-    public ShoppingCartDto getShoppingCart(@RequestParam(name = "username") String userName) {
+    public ShoppingCartDto getShoppingCart(@RequestParam(name = "username") @NotBlank String userName) {
         log.info("Getting shopping cart for user {}", userName);
         return shoppingCartService.getUserShoppingCart(userName);
     }
 
     @Override
     @ResponseStatus(HttpStatus.OK)
-    public ShoppingCartDto addProductToShoppingCart(@RequestParam(name = "username") String userName,
+    public ShoppingCartDto addProductToShoppingCart(@RequestParam(name = "username") @NotBlank String userName,
                                                     @RequestBody Map<UUID, Long> products) {
         log.info("Adding products {} to shopping cart for user {}", products, userName);
         return shoppingCartService.addProductsToShoppingCart(userName, products);
@@ -41,14 +44,14 @@ public class ShoppingCartController implements ShoppingCartOperations {
 
     @Override
     @ResponseStatus(HttpStatus.OK)
-    public void deactivateShoppingCart(@RequestParam(name = "username") String userName) {
+    public void deactivateShoppingCart(@RequestParam(name = "username") @NotBlank String userName) {
         log.info("Deactivating shopping cart for user {}", userName);
         shoppingCartService.deactivateShoppingCart(userName);
     }
 
     @Override
     @ResponseStatus(HttpStatus.OK)
-    public ShoppingCartDto removeProductsFromShoppingCart(@RequestParam(name = "username") String userName,
+    public ShoppingCartDto removeProductsFromShoppingCart(@RequestParam(name = "username") @NotBlank String userName,
                                                           @RequestBody List<UUID> productList) {
         log.info("Removing products {} from shopping cart for user {}", productList, userName);
         return shoppingCartService.removeProductsFromShoppingCart(userName, productList);
@@ -56,8 +59,8 @@ public class ShoppingCartController implements ShoppingCartOperations {
 
     @Override
     @ResponseStatus(HttpStatus.OK)
-    public ShoppingCartDto changeProductQuantity(@RequestParam(name = "username") String userName,
-                                                 @RequestBody ChangeProductQuantityRequest request) {
+    public ShoppingCartDto changeProductQuantity(@RequestParam(name = "username") @NotBlank String userName,
+                                                 @RequestBody @Valid @NotNull ChangeProductQuantityRequest request) {
         log.info("Changing quantity of products {} in shopping cart for user {}", request, userName);
         return shoppingCartService.changeQuantityOfProductsInShoppingCart(userName, request);
     }

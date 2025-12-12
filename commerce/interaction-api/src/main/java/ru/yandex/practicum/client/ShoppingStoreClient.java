@@ -10,10 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.yandex.practicum.circuit_breaker.ShoppingStoreClientFallback;
 import ru.yandex.practicum.dto.shoppingstore.ProductDto;
 import ru.yandex.practicum.enums.QuantityState;
 
-@FeignClient(name = "shopping-store", path = "/api/v1/shopping-store")
+@FeignClient(name = "shopping-store", path = "/api/v1/shopping-store", fallback = ShoppingStoreClientFallback.class)
 public interface ShoppingStoreClient {
 
     @GetMapping
