@@ -21,6 +21,14 @@ import ru.yandex.practicum.repository.DeliveryRepository;
 @Transactional
 public class DeliveryServiceImpl implements DeliveryService {
 
+    private static final Double BASE_PRICE = 5.0;
+    private static final Double ANOTHER_ADDRESS_RATIO = 2.0;
+    private static final Double FRAGILE_RATIO = 0.2;
+    private static final Double WEIGHT_RATIO = 0.3;
+    private static final Double VOLUME_RATIO = 0.2;
+    private static final String ADDRESS_2 = "ADDRESS_2";
+    private static final Double ANOTHER_STREET_RATIO = 0.2;
+
     private final DeliveryRepository deliveryRepository;
     private final DeliveryMapper deliveryMapper;
     private final OrderClient orderClient;
@@ -59,7 +67,8 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     public Double deliveryCost(OrderDto orderDto) {
-        double deliveryCost = 5.0;
+        double deliveryCost = BASE_PRICE;
+
         Delivery delivery = deliveryRepository.findByOrderId(orderDto.getDeliveryId())
                 .orElseThrow(() -> new NoDeliveryFoundException("Delivery with id %s for order with id %s not found"
                         .formatted(orderDto.getDeliveryId(), orderDto.getOrderId())));
@@ -69,18 +78,18 @@ public class DeliveryServiceImpl implements DeliveryService {
         delivery.setTotalVolume(orderDto.getDeliveryVolume());
 
         Address warehouseAddress = delivery.getFromAddress();
-        if (warehouseAddress.toString().contains("ADDRESS_2")) {
-            deliveryCost *= 2;
+        if (warehouseAddress.toString().contains(ADDRESS_2)) {
+            deliveryCost *= ANOTHER_ADDRESS_RATIO;
         }
         if (delivery.isFragile()) {
-            deliveryCost += deliveryCost * 0.2;
+            deliveryCost += deliveryCost * FRAGILE_RATIO;
         }
 
-        deliveryCost += delivery.getTotalWeight() * 0.3;
-        deliveryCost += delivery.getTotalVolume() * 0.2;
+        deliveryCost += delivery.getTotalWeight() * WEIGHT_RATIO;
+        deliveryCost += delivery.getTotalVolume() * VOLUME_RATIO;
 
         if (!delivery.getToAddress().getStreet().equals(warehouseAddress.getStreet())) {
-            deliveryCost += deliveryCost * 0.2;
+            deliveryCost += deliveryCost * ANOTHER_STREET_RATIO;
         }
         log.info("Delivery cost calculated: {}", deliveryCost);
         return deliveryCost;

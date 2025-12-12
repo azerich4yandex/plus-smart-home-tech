@@ -44,12 +44,10 @@ public class Delivery {
     Address fromAddress;
 
     @ManyToOne
-    @JoinColumn(name = "to_address_id")
-    @NotNull
+    @JoinColumn(name = "to_address_id", nullable = false)
     Address toAddress;
 
-    @Column(name = "order_id")
-    @NotNull
+    @Column(name = "order_id", nullable = false)
     UUID orderId;
 
     @Enumerated(EnumType.STRING)

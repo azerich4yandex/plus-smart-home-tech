@@ -1,6 +1,7 @@
 package ru.yandex.practicum.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,35 +25,35 @@ public class PaymentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public PaymentDto processPayment(@RequestBody @Valid OrderDto orderDto) {
+    public PaymentDto processPayment(@RequestBody @Valid @NotNull OrderDto orderDto) {
         log.info("Create payment for order {}", orderDto);
         return paymentService.processPayment(orderDto);
     }
 
     @PostMapping("/totalCost")
     @ResponseStatus(HttpStatus.OK)
-    public Double getTotalCost(@RequestBody @Valid OrderDto orderDto) {
+    public Double getTotalCost(@RequestBody @Valid @NotNull OrderDto orderDto) {
         log.info("Get total cost for order {}", orderDto);
         return paymentService.getTotalCost(orderDto);
     }
 
     @PostMapping("/refund")
     @ResponseStatus(HttpStatus.OK)
-    public void emulatePaymentSuccess(@RequestBody UUID paymentId) {
+    public void emulatePaymentSuccess(@RequestBody @NotNull UUID paymentId) {
         log.info("emulate payment success for payment {}", paymentId);
         paymentService.emulatePaymentSuccess(paymentId);
     }
 
     @PostMapping("/productCost")
     @ResponseStatus(HttpStatus.OK)
-    public Double getProductsCost(@RequestBody @Valid OrderDto orderDto) {
+    public Double getProductsCost(@RequestBody @Valid @NotNull OrderDto orderDto) {
         log.info("Get products cost for order {}", orderDto);
         return paymentService.getProductsCost(orderDto);
     }
 
     @PostMapping("/failed")
     @ResponseStatus(HttpStatus.OK)
-    public void emulatePaymentFailed(@RequestBody UUID paymentId) {
+    public void emulatePaymentFailed(@RequestBody @NotNull UUID paymentId) {
         log.info("emulate payment failed for payment {}", paymentId);
         paymentService.emulatePaymentFailed(paymentId);
     }

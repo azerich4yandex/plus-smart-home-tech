@@ -1,6 +1,7 @@
 package ru.yandex.practicum.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -32,21 +33,21 @@ public class WarehouseController {
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public void addNewProduct(@RequestBody @Valid NewProductInWarehouseRequest request) {
+    public void addNewProduct(@RequestBody @Valid @NotNull NewProductInWarehouseRequest request) {
         log.info("adding new product {} to warehouse", request);
         warehouseService.addNewProduct(request);
     }
 
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.OK)
-    public void addProductQuantity(@RequestBody @Valid AddProductToWarehouseRequest request) {
+    public void addProductQuantity(@RequestBody @Valid @NotNull AddProductToWarehouseRequest request) {
         log.info("adding quantity product {} to warehouse", request);
         warehouseService.addProductQuantity(request);
     }
 
     @PostMapping("/check")
     @ResponseStatus(HttpStatus.OK)
-    public BookedProductsDto checkQuantity(@RequestBody @Valid ShoppingCartDto shoppingCartDto) {
+    public BookedProductsDto checkQuantity(@RequestBody @Valid @NotNull ShoppingCartDto shoppingCartDto) {
         log.info("checking product {} in warehouse", shoppingCartDto);
         return warehouseService.checkQuantity(shoppingCartDto);
     }
@@ -67,14 +68,15 @@ public class WarehouseController {
 
     @PostMapping("/shipped")
     @ResponseStatus(HttpStatus.OK)
-    public void shippedToDelivery(@RequestBody @Valid ShippedToDeliveryRequest request) {
+    public void shippedToDelivery(@RequestBody @Valid @NotNull ShippedToDeliveryRequest request) {
         log.info("shipped to delivery {}", request);
         warehouseService.shippedToDelivery(request);
     }
 
     @PostMapping("/assembly")
     @ResponseStatus(HttpStatus.OK)
-    public BookedProductsDto assemblyProductsForOrder(@RequestBody @Valid AssemblyProductsForOrderRequest request) {
+    public BookedProductsDto assemblyProductsForOrder(
+            @RequestBody @Valid @NotNull AssemblyProductsForOrderRequest request) {
         log.info("assembly products for order {}", request);
         return warehouseService.assemblyProductsForOrder(request);
     }

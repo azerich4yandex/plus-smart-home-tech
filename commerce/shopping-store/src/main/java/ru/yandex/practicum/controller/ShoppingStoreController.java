@@ -1,6 +1,8 @@
 package ru.yandex.practicum.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,8 +33,7 @@ public class ShoppingStoreController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public Page<ProductDto> getShoppingStoreProducts(@RequestParam String category,
-                                                     Pageable pageable) {
+    public Page<ProductDto> getShoppingStoreProducts(@RequestParam @NotBlank String category, Pageable pageable) {
         log.info("Get products by category: {}", category);
 
         return shoppingStoreService.getProducts(ProductCategory.valueOf(category), pageable);
@@ -40,7 +41,7 @@ public class ShoppingStoreController {
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public ProductDto createProduct(@RequestBody @Valid ProductDto productDto) {
+    public ProductDto createProduct(@RequestBody @Valid @NotNull ProductDto productDto) {
         log.info("Create product: {}", productDto);
 
         return shoppingStoreService.createProduct(productDto);
@@ -48,7 +49,7 @@ public class ShoppingStoreController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public ProductDto updateProduct(@RequestBody @Valid ProductDto productDto) {
+    public ProductDto updateProduct(@RequestBody @Valid @NotNull ProductDto productDto) {
         log.info("Update product: {}", productDto);
 
         return shoppingStoreService.updateProduct(productDto);
@@ -56,7 +57,7 @@ public class ShoppingStoreController {
 
     @PostMapping("/removeProductFromStore")
     @ResponseStatus(HttpStatus.OK)
-    public Boolean deleteProduct(@RequestBody UUID id) {
+    public Boolean deleteProduct(@RequestBody @NotNull UUID id) {
         log.info("Remove product from store: {}", id);
 
         return shoppingStoreService.deleteProduct(id);
@@ -64,7 +65,8 @@ public class ShoppingStoreController {
 
     @PostMapping("/quantityState")
     @ResponseStatus(HttpStatus.OK)
-    public Boolean updateQuantityState(@RequestParam UUID productId, @RequestParam QuantityState quantityState) {
+    public Boolean updateQuantityState(@RequestParam @NotNull UUID productId,
+                                       @RequestParam @NotNull QuantityState quantityState) {
         log.info("Update product {} quantity: {}", productId, quantityState);
 
         return shoppingStoreService.updateQuantityState(productId, quantityState);
@@ -72,7 +74,7 @@ public class ShoppingStoreController {
 
     @GetMapping("/{productId}")
     @ResponseStatus(HttpStatus.OK)
-    public ProductDto getProductById(@PathVariable UUID productId) {
+    public ProductDto getProductById(@PathVariable @NotNull UUID productId) {
         log.info("Get product by id: {}", productId);
 
         return shoppingStoreService.getProductById(productId);

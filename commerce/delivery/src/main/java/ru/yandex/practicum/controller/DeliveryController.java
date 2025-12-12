@@ -1,5 +1,7 @@
 package ru.yandex.practicum.controller;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,35 +26,35 @@ public class DeliveryController {
 
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
-    public DeliveryDto planDelivery(@RequestBody DeliveryDto deliveryDto) {
+    public DeliveryDto planDelivery(@RequestBody @Valid @NotNull DeliveryDto deliveryDto) {
         log.info("Plan delivery for {}", deliveryDto);
         return deliveryService.planDelivery(deliveryDto);
     }
 
     @PostMapping("/successful")
     @ResponseStatus(HttpStatus.OK)
-    public void deliverySuccessful(@RequestBody UUID deliveryId) {
+    public void deliverySuccessful(@RequestBody @NotNull UUID deliveryId) {
         log.info("Emulate: Delivery {} successful", deliveryId);
         deliveryService.deliverySuccessful(deliveryId);
     }
 
     @PostMapping("/picked")
     @ResponseStatus(HttpStatus.OK)
-    public void deliveryPicked(UUID deliveryId) {
+    public void deliveryPicked(@NotNull UUID deliveryId) {
         log.info("Emulate: Delivery {} picked", deliveryId);
         deliveryService.deliveryPicked(deliveryId);
     }
 
     @PostMapping("/failed")
     @ResponseStatus(HttpStatus.OK)
-    public void deliveryFailed(UUID deliveryId) {
+    public void deliveryFailed(@NotNull UUID deliveryId) {
         log.info("Emulate: Delivery {} failed", deliveryId);
         deliveryService.deliveryFailed(deliveryId);
     }
 
     @PostMapping("/cost")
     @ResponseStatus(HttpStatus.OK)
-    public Double deliveryCost(OrderDto orderDto) {
+    public Double deliveryCost(@Valid @NotNull OrderDto orderDto) {
         log.info("Calculate delivery cost for {}", orderDto);
         return deliveryService.deliveryCost(orderDto);
     }

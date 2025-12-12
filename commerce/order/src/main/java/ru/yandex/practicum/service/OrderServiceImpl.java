@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.client.DeliveryClient;
 import ru.yandex.practicum.client.PaymentClient;
@@ -38,7 +37,6 @@ public class OrderServiceImpl implements OrderService {
     private final WarehouseClient warehouseClient;
 
     @Override
-    @Cacheable(cacheNames = "orders")
     public List<OrderDto> getClientOrders(String userName) {
         checkUser(userName);
         log.info("Get client orders {}", userName);
